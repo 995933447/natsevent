@@ -40,7 +40,7 @@ func CloseConn(name string) error {
 type ConnConfig struct {
 	User     string
 	Password string
-	Timeout  int
+	Timeout  time.Duration
 	Secure   bool
 	RootCa   string
 	Servers  []string
@@ -70,7 +70,7 @@ func Connect(name string, cfg *ConnConfig) (*nats.Conn, error) {
 		AllowReconnect: true,
 		MaxReconnect:   -1,
 		ReconnectWait:  100 * time.Millisecond,
-		Timeout:        time.Duration(cfg.Timeout) * time.Second,
+		Timeout:        cfg.Timeout,
 		Secure:         cfg.Secure,
 		TLSConfig:      tlsCfg,
 	}
