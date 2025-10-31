@@ -71,7 +71,7 @@ func WithConsumerPoolSize(consumerPoolSize uint64) ApplySubOptsFunc {
 // 临时消费者没有持久化消费位置（last acked sequence）。
 // 所以它会把队列里未被ack的消息重新投递过来，即使是上一次运行进程已经确认的消息
 // 程序需要做好幂等性
-func Subscribe[T any](eventName, subscriberName string, handleFunc func(any *T) error, opts ...ApplySubOptsFunc) error {
+func Subscribe[T any](eventName, subscriberName string, handleFunc func(evt *T) error, opts ...ApplySubOptsFunc) error {
 	var subOpts SubscribeOptions
 	for _, opt := range opts {
 		opt(&subOpts)
@@ -196,7 +196,7 @@ func callConsumer[T any](msg *nats.Msg, handleFunc func(*T) error, isMenuAck boo
 // 临时消费者没有持久化消费位置（last acked sequence）。
 // 所以它会把队列里未被ack的消息重新投递过来，即使是上一次运行进程已经确认的消息
 // 程序需要做好幂等性
-func SubscribeBroadcast[T any](eventName, subscriberName string, handleFunc func(any *T) error, opts ...ApplySubOptsFunc) error {
+func SubscribeBroadcast[T any](eventName, subscriberName string, handleFunc func(evt *T) error, opts ...ApplySubOptsFunc) error {
 	return Subscribe(eventName, subscriberName, handleFunc, append(opts, WithListenBroadcast())...)
 }
 
