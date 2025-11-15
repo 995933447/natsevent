@@ -21,6 +21,9 @@ func SetConn(name string, conn *nats.Conn) {
 
 func GetConn(name string) (*nats.Conn, bool) {
 	conn, ok := connMap.Load(name)
+	if !ok {
+		return nil, false
+	}
 	return conn.(*nats.Conn), ok
 }
 
